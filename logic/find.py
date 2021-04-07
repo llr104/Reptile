@@ -115,22 +115,24 @@ def apiSearchProduct(productName):
 def analysisSearch(text):
     user_dic = json.loads(text)
     # print("user_dic:", user_dic["data"]["offerList"][0]["information"])
-    print("offerList len:", len(user_dic["data"]["offerList"]))
-    
-    products = []
-    for offer in user_dic["data"]["offerList"]:
-        # print("offer:", offer)
-        productUrl = offer["information"]["productUrl"]
-        productTitle = offer["information"]["puretitle"] 
-        buyNow = offer["information"]["buyNow"] 
-        supplierName = offer["supplier"]["supplierName"]
-        supplierHref = offer["supplier"]["supplierHref"]
-        mainImage = offer["image"]["mainImage"]
-        tradePrice =  offer["tradePrice"]["price"]
 
-        p = Product(productTitle, tradePrice, productUrl, mainImage, supplierHref, supplierName)
-        products.append(p)
-    
+    products = []
+    try:
+        print("offerList len:", len(user_dic["data"]["offerList"]))    
+        for offer in user_dic["data"]["offerList"]:
+            # print("offer:", offer)
+            productUrl = offer["information"]["productUrl"]
+            productTitle = offer["information"]["puretitle"] 
+            buyNow = offer["information"]["buyNow"] 
+            supplierName = offer["supplier"]["supplierName"]
+            supplierHref = offer["supplier"]["supplierHref"]
+            mainImage = offer["image"]["mainImage"]
+            tradePrice =  offer["tradePrice"]["price"]
+
+            p = Product(productTitle, tradePrice, productUrl, mainImage, supplierHref, supplierName)
+            products.append(p)
+    except:
+        pass
     return products
 
 # if __name__ == '__main__':

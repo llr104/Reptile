@@ -7,9 +7,11 @@ import urllib.parse
 from hashlib import md5
 
 
+
 def createDir(dirPath):
     if not os.path.exists(dirPath):
         os.makedirs(dirPath)
+
 
 def loadProductHtml(url):
     md5_url = md5(url.encode('utf8')).hexdigest()
@@ -21,10 +23,10 @@ def loadProductHtml(url):
     else:
         try:
             print("loadProductHtml requests product:", url)
-            strhtml=requests.get(url)
+            response = requests.get(url)
             with open(filePath, "w", encoding='utf-8')as f:
-                f.write(strhtml.text)
-            text = strhtml.text
+                f.write(response.text)
+            text = response.text
         except:
             pass
     
@@ -32,6 +34,7 @@ def loadProductHtml(url):
         return BeautifulSoup(text, 'lxml')
     else:
         return None
+
 
 def loadSiteHtml(url):
     md5_url = md5(url.encode('utf8')).hexdigest()
@@ -43,10 +46,10 @@ def loadSiteHtml(url):
     else:
         try :
             print("loadSiteHtml requests site:", url)
-            strhtml=requests.get(url)
+            response = requests.get(url)
             with open(filePath, "w", encoding='utf-8')as f:
-                f.write(strhtml.text)
-            text = strhtml.text
+                f.write(response.text)
+            text = response.text
         except:
             pass
     
@@ -55,6 +58,7 @@ def loadSiteHtml(url):
     else:
         return None
 
+
 def loadImage(url):
     
     filePath = findImagePage(url)
@@ -62,6 +66,7 @@ def loadImage(url):
     if os.path.exists(filePath):
         data = open(filePath, 'rb')
         content = data.read()
+        print("loadImage:", filePath)
     else:
         try:
             print("loadImage requests url:", url)

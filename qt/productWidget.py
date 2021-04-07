@@ -74,10 +74,9 @@ class ProductWidget(QWidget):
         l.setWordWrap(True)
         layout.addWidget(l)
 
-
         self._img = ImageView(product.imageUrl)
         # 从文件加载图片
-        print("product.imageUrl:", product.imageUrl)
+        
         layout.addWidget(self._img)
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)

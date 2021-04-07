@@ -14,10 +14,10 @@ class Product(object):
         self.keywords = keywords
 
         if self.keywords is None:
-           soup = loadProductHtml(self.productUrl)
-           if soup is None:
+            soup = loadProductHtml(self.productUrl)
+            if soup is None:
                return
-           self.keywords = soup.find(attrs={"name":"keywords"})['content']
+            self.keywords = soup.find(attrs={"name":"keywords"})['content']
         
     def tostring(self):
         des = 'name = %s, productUrl = %s imageUrl = %s, price = %s siteUrl = %s, \
