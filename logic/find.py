@@ -76,10 +76,7 @@ def analysisProductList(grids, siteUrl, siteTitle):
     for gird in grids:
         if gird["module-title"] == "productListPc":
             data = urllib.parse.unquote(gird["module-data"])
-
-            with open("a.json", "w", encoding='utf-8')as f:
-                f.write(data)
-            
+         
             # print("analysisProductList:", data)
             user_dic = json.loads(data)
             products = user_dic["mds"]["moduleData"]["data"]["productList"]
