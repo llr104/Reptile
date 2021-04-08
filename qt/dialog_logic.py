@@ -160,12 +160,15 @@ class Dialog_logic(Ui_mainUI):
             keys.append(p.keywords)
             urls.append(p.productUrl)
         
-        fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
-        data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
-        df = pd.DataFrame(data)
-        df.to_excel(fp)
+        try:
+            fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
+            data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
+            df = pd.DataFrame(data)
+            df.to_excel(fp)
 
-        QMessageBox.question(self.listWidget1, '导出成功', '已经导出到目录:' + fp, QMessageBox.Yes)
+            QMessageBox.information(self.listWidget1, '导出成功', '导出成功,已经导出到目录:' + fp, QMessageBox.Yes)
+        except:
+            QMessageBox.warning(self.listWidget1, '导出失败', "导出失败,请检查文件:" + fp + "是否被其他应用占用", QMessageBox.Ok)
 
     def siteOutPut(self):
         print("siteOutPut")
@@ -190,14 +193,14 @@ class Dialog_logic(Ui_mainUI):
             keys.append(p.keywords)
             urls.append(p.productUrl)
         
-        fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
-        data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
-        df = pd.DataFrame(data)
-        df.to_excel(fp)
-
-        QMessageBox.question(self.listWidget1, '导出成功', '已经导出到目录:' + fp, QMessageBox.Yes)
-        
-        pass
+        try:
+            fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
+            data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
+            df = pd.DataFrame(data)
+            df.to_excel(fp)
+            QMessageBox.information(self.listWidget2, '导出成功', '导出成功,已经导出到目录:' + fp, QMessageBox.Yes)
+        except:
+            QMessageBox.warning(self.listWidget2, '导出失败', "导出失败,请检查文件:" + fp + "是否被其他应用占用", QMessageBox.Ok)
     
     def test1(self, item):
         print("test1:", item)
