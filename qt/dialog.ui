@@ -134,7 +134,7 @@
        <x>20</x>
        <y>91</y>
        <width>1200</width>
-       <height>580</height>
+       <height>541</height>
       </rect>
      </property>
     </widget>
@@ -188,6 +188,74 @@
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="productPreBtn">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>640</y>
+       <width>93</width>
+       <height>34</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>上一页</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="productTotalPageLab">
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>650</y>
+       <width>100</width>
+       <height>15</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>共x页</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="productNextBtn">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>640</y>
+       <width>93</width>
+       <height>34</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>下一页</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="productGoBtn">
+     <property name="geometry">
+      <rect>
+       <x>660</x>
+       <y>640</y>
+       <width>51</width>
+       <height>34</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>go</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="productPageLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>640</y>
+       <width>60</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhDigitsOnly</set>
+     </property>
+     <property name="maxLength">
+      <number>5</number>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -219,7 +287,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="preBtn">
+    <widget class="QPushButton" name="sitePreBtn">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -232,7 +300,7 @@
       <string>上一页</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="nextBtn">
+    <widget class="QPushButton" name="siteNextBtn">
      <property name="geometry">
       <rect>
        <x>460</x>
@@ -245,7 +313,7 @@
       <string>下一页</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="goBtn">
+    <widget class="QPushButton" name="siteGoBtn">
      <property name="geometry">
       <rect>
        <x>660</x>
@@ -258,12 +326,12 @@
       <string>go</string>
      </property>
     </widget>
-    <widget class="QLabel" name="totalPageLab">
+    <widget class="QLabel" name="siteTotalPageLab">
      <property name="geometry">
       <rect>
        <x>730</x>
        <y>650</y>
-       <width>72</width>
+       <width>100</width>
        <height>15</height>
       </rect>
      </property>
@@ -271,7 +339,7 @@
       <string>共x页</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="pageLineEdit">
+    <widget class="QLineEdit" name="sitePageLineEdit">
      <property name="geometry">
       <rect>
        <x>590</x>

@@ -94,28 +94,32 @@ def analysisProductList(grids, siteUrl, siteTitle):
     return productList
 
 
-def apiSearchProduct(productName):
+def apiSearchProduct(productName, page = 1):
     
-    url = "https://open-s.alibaba.com/openservice/galleryProductOfferResultViewService?SearchText=" + productName
+    url = "https://open-s.alibaba.com/openservice/galleryProductOfferResultViewService?SearchText=" + productName + "&page=" + str(page)
     response = requests.get(url)
     if response.ok == False:
         return
     # print("response.text:", response.text)
 
     md5_url = md5(productName.encode('utf8')).hexdigest()
-    fn = os.path.join("download/search", md5_url + ".json")
+    fn = os.path.join("download/search", md5_url + str(page) + ".json")
     with open(fn, "w", encoding='utf-8')as f:
         f.write(response.text)
     
     return analysisSearch(response.text)
+
 
 def analysisSearch(text):
     user_dic = json.loads(text)
     # print("user_dic:", user_dic["data"]["offerList"][0]["information"])
 
     products = []
+    totalCount = 0
     try:
-        print("offerList len:", len(user_dic["data"]["offerList"]))    
+        print("offerList len:", len(user_dic["data"]["offerList"]))
+        print("totalCount:", user_dic["data"]["totalCount"])
+        totalCount = user_dic["data"]["totalCount"]/len(user_dic["data"]["offerList"])
         for offer in user_dic["data"]["offerList"]:
             # print("offer:", offer)
             productUrl = offer["information"]["productUrl"]
@@ -130,7 +134,7 @@ def analysisSearch(text):
             products.append(p)
     except:
         pass
-    return products
+    return products, math.ceil(totalCount)
 
 # if __name__ == '__main__':
 #     createDir("download/product")
