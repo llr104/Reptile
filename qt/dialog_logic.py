@@ -213,7 +213,12 @@ class Dialog_logic(Ui_mainUI):
         self.productPageLineEdit.setText(str(curPage))
         self.productTotalPageLab.setText("共"+str(totalPage)+"页")
 
-        self._searchProductDict[keyword] = products
+        if self._searchProductDict.get(keyword) is not None:
+            ps = self._searchProductDict[keyword]
+            ps.update(products)
+        else:
+            self._searchProductDict[keyword] = set(products)
+
         self.__load_search_products__(products)
 
     def __load_search_products__(self, products:Product):
@@ -238,11 +243,11 @@ class Dialog_logic(Ui_mainUI):
         products = site_productlist(site, page)
         totalPage = site_product_page(site, page)
 
-        ps = self._siteProductDict.get(site)
-        if ps is None:
-            self._siteProductDict[site] = products
+        if self._siteProductDict.get(site) is not None:
+            ps = self._siteProductDict[site]
+            ps.update(products)
         else:
-            self._siteProductDict[site].extend(products)
+            self._siteProductDict[site] = set(products)
 
         self.sitePageLineEdit.setText(str(page))
         self.siteTotalPageLab.setText("共"+str(totalPage)+"页")

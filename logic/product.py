@@ -18,7 +18,12 @@ class Product(object):
             # if soup is None:
             #    return
             # self.keywords = soup.find(attrs={"name":"keywords"})['content']
-        
+    def __hash__(self):
+        return hash(self.productUrl)
+    
+    def __eq__(self, other):
+        return self.productUrl == other.productUrl
+
     def tostring(self):
         des = 'name = %s, productUrl = %s imageUrl = %s, price = %s siteUrl = %s, \
              siteName = %s, keywords = %s' %(self.name, self.productUrl, self.imageUrl, self.price, self.siteUrl, self.siteName, self.keywords)
