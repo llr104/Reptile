@@ -1,17 +1,21 @@
-
-from PyQt5.QtWidgets import QListWidgetItem, QMenu, QToolButton
+import pandas as pd
+from PyQt5.QtWidgets import QListWidgetItem, QMenu, QToolButton, QMessageBox, QWidget
 from qt.dialog import *
 from qt.productWidget import ProductWidget
 
 import sys
+import os
 sys.path.append("..") 
 from logic import Product, apiSearchProduct, site_productlist, site_product_page
+from logic import url2filename
 
 
 class Dialog_logic(Ui_mainUI):
     def __init__(self):
         super(Dialog_logic, self).__init__()
-        
+
+        self._searchProductDict = {}
+        self._siteProductDict = {}
         
     def setupUi(self, Dialog):
         super(Dialog_logic, self).setupUi(Dialog)
@@ -22,6 +26,8 @@ class Dialog_logic(Ui_mainUI):
         self.nextBtn.clicked.connect(lambda: self.nextPage())
         self.preBtn.clicked.connect(lambda: self.prePage())
         self.goBtn.clicked.connect(lambda: self.goPage())
+        self.productOutPutBtn.clicked.connect(lambda: self.productOutPut())
+        self.siteOutPutBtn.clicked.connect(lambda: self.siteOutPut())
 
         self.listWidget1.itemClicked.connect(self.test1)
         self.listWidget2.itemClicked.connect(self.test2)
@@ -42,6 +48,8 @@ class Dialog_logic(Ui_mainUI):
         
         print("search product:", text)
         products = apiSearchProduct(text)
+
+        self._searchProductDict[text] = products
         self.__load_search_products__(products)
     
     def searchSite(self):
@@ -86,13 +94,73 @@ class Dialog_logic(Ui_mainUI):
 
     def goPage(self):
         self.searchSite()
+
+    def productOutPut(self):
+        print("productOutPut")
+
+        text = self.productLineEdit.text()
+        if len(text) == 0:
+            return
+        
+        names = []
+        sites = []
+        prices = []
+        keys = []
+        urls = []
+
+        ps = self._searchProductDict.get(text)
+        if ps is None:
+            return
+
+        for p in ps:
+            names.append(p.name)
+            sites.append(p.siteName)
+            prices.append(p.price)
+            keys.append(p.keywords)
+            urls.append(p.productUrl)
+        
+        fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
+        data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
+        df = pd.DataFrame(data)
+        df.to_excel(fp)
+
+        QMessageBox.question(self.listWidget1, '导出成功', '已经导出到目录:' + fp, QMessageBox.Yes)
+
+    def siteOutPut(self):
+        print("siteOutPut")
+        text = self.siteLineEdit.text()
+        if len(text) == 0:
+            return
+
+        names = []
+        sites = []
+        prices = []
+        keys = []
+        urls = []
+
+        ps = self._siteProductDict.get(text)
+        if ps is None:
+            return
+
+        for p in ps:
+            names.append(p.name)
+            sites.append(p.siteName)
+            prices.append(p.price)
+            keys.append(p.keywords)
+            urls.append(p.productUrl)
+        
+        fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
+        data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
+        df = pd.DataFrame(data)
+        df.to_excel(fp)
+
+        QMessageBox.question(self.listWidget1, '导出成功', '已经导出到目录:' + fp, QMessageBox.Yes)
+        
+        pass
     
     def test1(self, item):
         print("test1:", item)
 
-        
-     
-    
     def test2(self):
         print("test2")
 
@@ -118,6 +186,12 @@ class Dialog_logic(Ui_mainUI):
         print("search site:", site, page)
         products = site_productlist(site, page)
         totalPage = site_product_page(site, page)
+
+        ps = self._siteProductDict.get(site)
+        if ps is None:
+            self._siteProductDict[site] = products
+        else:
+            self._siteProductDict[site].expand(products)
 
         self.pageLineEdit.setText(str(page))
         self.totalPageLab.setText("共"+str(totalPage)+"页")

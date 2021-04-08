@@ -164,7 +164,7 @@ class ProductWidget(QWidget):
 
     def copyShop(self):
         clipboard = QApplication.clipboard()
-        clipboard.setText(self.product.siteName)
+        clipboard.setText(self.product.name)
     
     def copyImage(self):
 

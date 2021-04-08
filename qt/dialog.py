@@ -63,6 +63,10 @@ class Ui_mainUI(object):
         self.productLineEdit.setGeometry(QtCore.QRect(30, 10, 780, 40))
         self.productLineEdit.setMaxLength(1024)
         self.productLineEdit.setObjectName("productLineEdit")
+        self.productOutPutBtn = QtWidgets.QPushButton(self.tab_1)
+        self.productOutPutBtn.setGeometry(QtCore.QRect(1130, 10, 80, 40))
+        self.productOutPutBtn.setAutoDefault(True)
+        self.productOutPutBtn.setObjectName("productOutPutBtn")
         self.tabWidget.addTab(self.tab_1, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
@@ -124,10 +128,14 @@ class Ui_mainUI(object):
         font.setPointSize(12)
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
+        self.siteOutPutBtn = QtWidgets.QPushButton(self.tab_2)
+        self.siteOutPutBtn.setGeometry(QtCore.QRect(1130, 10, 80, 40))
+        self.siteOutPutBtn.setAutoDefault(True)
+        self.siteOutPutBtn.setObjectName("siteOutPutBtn")
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(mainUI)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(mainUI)
 
     def retranslateUi(self, mainUI):
@@ -140,6 +148,7 @@ class Ui_mainUI(object):
         self.label_3.setText(_translate("mainUI", "站点"))
         self.label.setText(_translate("mainUI", "商品名称"))
         self.productLineEdit.setPlaceholderText(_translate("mainUI", "搜索商品名称"))
+        self.productOutPutBtn.setText(_translate("mainUI", "导出"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_1), _translate("mainUI", "搜索商品"))
         self.siteSearchBtn.setText(_translate("mainUI", "搜索"))
         self.preBtn.setText(_translate("mainUI", "上一页"))
@@ -152,5 +161,6 @@ class Ui_mainUI(object):
         self.label_8.setText(_translate("mainUI", "站点"))
         self.label_9.setText(_translate("mainUI", "图片"))
         self.label_10.setText(_translate("mainUI", "商品名称"))
+        self.siteOutPutBtn.setText(_translate("mainUI", "导出"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("mainUI", "搜索商家"))
 
