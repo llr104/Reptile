@@ -97,6 +97,7 @@ class Dialog_logic(Ui_mainUI):
         print("test2")
 
     def __load_search_products__(self, products:Product):
+        self.listWidget1.clear()
         for p in products:
             w = ProductWidget(p)
             item = QListWidgetItem(self.listWidget1)

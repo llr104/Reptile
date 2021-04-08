@@ -13,16 +13,16 @@ class Product(object):
         self.siteName = siteName
         self.keywords = keywords
 
-        if self.keywords is None:
-            soup = loadProductHtml(self.productUrl)
-            if soup is None:
-               return
-            self.keywords = soup.find(attrs={"name":"keywords"})['content']
+        # if self.keywords is None:
+            # soup = loadProductHtml(self.productUrl)
+            # if soup is None:
+            #    return
+            # self.keywords = soup.find(attrs={"name":"keywords"})['content']
         
     def tostring(self):
         des = 'name = %s, productUrl = %s imageUrl = %s, price = %s siteUrl = %s, \
              siteName = %s, keywords = %s' %(self.name, self.productUrl, self.imageUrl, self.price, self.siteUrl, self.siteName, self.keywords)
         return des
     
-    def getKeywords(self):
-        return self.keywords
+    def setKeywords(self, key):
+        self.keywords = key

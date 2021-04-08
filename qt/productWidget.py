@@ -5,38 +5,79 @@ sys.path.append("..")
 import webbrowser
 import requests
 
+from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtCore import QResource, QUrl, QMimeData
 from PyQt5.QtGui import QPixmap, QMovie
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QLabel
 
 from logic.product import Product
-from logic.util import loadImage, findImagePage
+from logic.util import loadImage, findImagePage, loadProductHtml
 
 from PyQt5.QtWidgets import QApplication,QWidget,QMenu,QMessageBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 
 
+class ImageThread(QThread):
+    finished_signal = pyqtSignal(bytes)
+    def __init__(self, imageUrl, parent=None):
+        self.imageUrl = imageUrl
+        super().__init__(parent)
+
+    def run(self):
+        self.start()
+        data = loadImage(self.imageUrl)
+        self.finished_signal.emit(data)
+
+class KeyWordThread(QThread):
+    finished_signal = pyqtSignal(str)
+    def __init__(self, url, parent=None):
+        self.url = url
+        super().__init__(parent)
+
+    def run(self):
+        self.start()
+        keywords = ""
+        soup = loadProductHtml(self.url)
+        if soup is not None:
+            keywords = soup.find(attrs={"name":"keywords"})['content']
+        
+        self.finished_signal.emit(keywords)
+
 class ImageView(QWidget):
 
     def __init__(self, imageUrl, *args, **kwargs):
         super(ImageView, self).__init__(*args, **kwargs)
-        layout = QHBoxLayout(self)
-       
+        self.resize(100, 100)
+        self.layout = QHBoxLayout(self)
+        self.imgThread = ImageThread(imageUrl)
+        self.imgThread.finished_signal.connect(self._showImage)
+        self.imgThread.start()
+        
         img = QPixmap("head.jpg")
-        data = loadImage(imageUrl)
-        img.loadFromData(data)
+        # data = loadImage(imageUrl)
+        # img.loadFromData(data)
       
         img = img.scaledToHeight(100)
         img = img.scaledToWidth(100)
-        self._img = img
 
         lable = QLabel(self, pixmap=img)
         lable.setMaximumSize(100, 100)
-        layout.addWidget(lable)
+
+        self.lable = lable
+
+        self.layout.addWidget(lable)
     
-    def getImage(self):
-        return self._img
+    def __del__(self):
+        # print("ImageView __del__")
+        self.imgThread.terminate()
+    
+    def _showImage(self, data):
+        img = QPixmap("head.jpg")
+        img.loadFromData(data)
+        img = img.scaledToHeight(100)
+        img = img.scaledToWidth(100)
+        self.lable.setPixmap(img)
 
 
 class ProductWidget(QWidget):
@@ -45,7 +86,6 @@ class ProductWidget(QWidget):
         super(ProductWidget, self).__init__(*args, **kwargs)
         
         self.product = product
-
         layout = QHBoxLayout(self)
         layout.setSpacing(50)
 
@@ -68,11 +108,18 @@ class ProductWidget(QWidget):
         l.setWordWrap(True)
         layout.addWidget(l)
 
+        if product.keywords is None:
+            self.keywordThread = KeyWordThread(product.productUrl)
+            self.keywordThread.finished_signal.connect(self._showKewWord)
+            self.keywordThread.start()
+
         l = QLabel(self, text=product.keywords)
         l.setMaximumWidth(300)
         l.resize(300, 100)
         l.setWordWrap(True)
         layout.addWidget(l)
+
+        self._keywordLab = l
 
         self._img = ImageView(product.imageUrl)
         # 从文件加载图片
@@ -96,8 +143,16 @@ class ProductWidget(QWidget):
         self._copyImage.triggered.connect(self.copyImage)
         self._openShop.triggered.connect(self.openShop)
         self._openSite.triggered.connect(self.openSite)
-   
     
+    def __del__(self):
+        # print("ProductWidget __del__")
+        if self.keywordThread is not None:
+            self.keywordThread.terminate() 
+   
+    def _showKewWord(self, key):
+        self.product.setKeywords(key)
+        self._keywordLab.setText(key)
+
     def getProduct(self) -> Product:
         return self.product
     
@@ -112,9 +167,7 @@ class ProductWidget(QWidget):
         clipboard.setText(self.product.siteName)
     
     def copyImage(self):
-        # clipboard = QApplication.clipboard()
-        # clipboard.setPixmap(self._img.getImage())
-        # print("copyImage:", self._img.getImage())
+
         
         p = os.path.join(os.getcwd(), findImagePage(self.product.imageUrl))
         print("copyImage path:", p)
