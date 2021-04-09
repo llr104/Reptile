@@ -1,4 +1,5 @@
-import pandas as pd
+
+from pandas import DataFrame
 from PyQt5.QtWidgets import QListWidgetItem, QMenu, QToolButton, QMessageBox, QWidget
 from qt.dialog import *
 from qt.productWidget import ProductWidget
@@ -163,7 +164,7 @@ class Dialog_logic(Ui_mainUI):
         try:
             fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
             data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
-            df = pd.DataFrame(data)
+            df = DataFrame(data)
             df.to_excel(fp)
 
             QMessageBox.information(self.listWidget1, '导出成功', '导出成功,已经导出到目录:' + fp, QMessageBox.Yes)
@@ -196,7 +197,7 @@ class Dialog_logic(Ui_mainUI):
         try:
             fp = os.path.join(os.getcwd(), "output", url2filename(text) + ".xlsx")
             data = {"商品名":names, "站名":sites, "价格":prices, "关键字":keys, "商品地址":urls}
-            df = pd.DataFrame(data)
+            df = DataFrame(data)
             df.to_excel(fp)
             QMessageBox.information(self.listWidget2, '导出成功', '导出成功,已经导出到目录:' + fp, QMessageBox.Yes)
         except:
